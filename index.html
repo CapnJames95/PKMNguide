@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon eGuides</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --darker: #0d0f1e;
+    --panel: #141828;
+    --card: #1a2238;
+    --border: #243058;
+    --text: #eceef8;
+    --muted: #8892cc;
+    --gold: #F5C518;
+    --fire: #FF6B35;
+    --leaf: #4CAF50;
+    --ruby: #CC2200;
+    --sapphire: #0055CC;
+    --emerald: #00AA44;
+    --diamond: #88ccff;
+    --pearl: #ffaacc;
+    --platinum: #c0c0c0;
+    --heartgold: #ffcc44;
+    --soulsilver: #aaddee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--darker);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    background: var(--panel);
+    border-bottom: 2px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-logo {
+    font-family: 'Bungee', cursive;
+    letter-spacing: 1px;
+    line-height: 1;
+    color: #fff1c2;
+    text-shadow: 3px 3px 0 rgba(0,0,0,.32);
+    font-size: 1.5rem;
+  }
+  .header-logo span {
+    font-size: .72em;
+    color: #ffd977;
+  }
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 80px);
+    padding: 48px 24px;
+    gap: 48px;
+  }
+  .hero-title {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    color: #fff1c2;
+    text-shadow: 3px 3px 0 rgba(0,0,0,.4);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .cards {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .guide-card {
+    text-decoration: none;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 36px 40px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    cursor: pointer;
+  }
+  .guide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.55);
+  }
+  .guide-card.gen3:hover { border-color: var(--emerald); }
+  .guide-card.gen4:hover { border-color: var(--diamond); }
+  .card-gen-label {
+    font-family: 'Bungee', cursive;
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-shadow: 3px 3px 0 rgba(0,0,0,.35);
+  }
+  .gen3 .card-gen-label { color: var(--emerald); }
+  .gen4 .card-gen-label { color: var(--diamond); }
+  .card-eguide {
+    font-family: 'Bungee', cursive;
+    font-size: 1rem;
+    color: #ffd977;
+    letter-spacing: 1px;
+  }
+  .card-title {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .card-games {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  .game-tag {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tag-fire    { background: rgba(255,107,53,0.18); color: var(--fire); border: 1px solid rgba(255,107,53,0.3); }
+  .tag-leaf    { background: rgba(76,175,80,0.18);  color: var(--leaf); border: 1px solid rgba(76,175,80,0.3); }
+  .tag-ruby    { background: rgba(204,34,0,0.18);   color: #ff6655;     border: 1px solid rgba(204,34,0,0.3); }
+  .tag-sapphire{ background: rgba(0,85,204,0.18);   color: #5599ff;     border: 1px solid rgba(0,85,204,0.3); }
+  .tag-emerald { background: rgba(0,170,68,0.18);   color: var(--emerald); border: 1px solid rgba(0,170,68,0.3); }
+  .tag-diamond { background: rgba(136,204,255,0.18);color: var(--diamond); border: 1px solid rgba(136,204,255,0.3); }
+  .tag-pearl   { background: rgba(255,170,204,0.18);color: var(--pearl); border: 1px solid rgba(255,170,204,0.3); }
+  .tag-platinum{ background: rgba(192,192,192,0.18);color: var(--platinum); border: 1px solid rgba(192,192,192,0.3); }
+  .tag-heartgold{ background: rgba(255,204,68,0.18);color: var(--heartgold); border: 1px solid rgba(255,204,68,0.3); }
+  .tag-soulsilver{ background: rgba(170,221,238,0.18);color: var(--soulsilver); border: 1px solid rgba(170,221,238,0.3); }
+  .card-cta {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .gen3 .card-cta { background: var(--emerald); color: #000; }
+  .gen4 .card-cta { background: var(--diamond); color: #000; }
+  .guide-card:hover .card-cta { opacity: 0.85; }
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--border);
+    letter-spacing: 0.3px;
+  }
+  @media (max-width: 680px) {
+    header { padding: 14px 20px; }
+    .guide-card { width: 100%; max-width: 340px; padding: 28px 24px; }
+    main { padding: 32px 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-logo">PKMN<br><span>eGUIDES</span></div>
+  <div class="header-subtitle">Your complete Pokémon companion</div>
+</header>
+<main>
+  <div>
+    <div class="hero-title">Choose Your Generation</div>
+    <div class="hero-sub">Select a guide to get started</div>
+  </div>
+  <div class="cards">
+    <a class="guide-card gen3" href="Gen 3/index.html">
+      <div class="card-gen-label">GEN 3</div>
+      <div class="card-eguide">eGUIDE</div>
+      <div class="card-title">The complete Gen 3 companion</div>
+      <div class="card-games">
+        <span class="game-tag tag-fire">FireRed</span>
+        <span class="game-tag tag-leaf">LeafGreen</span>
+        <span class="game-tag tag-ruby">Ruby</span>
+        <span class="game-tag tag-sapphire">Sapphire</span>
+        <span class="game-tag tag-emerald">Emerald</span>
+      </div>
+      <div class="card-cta">Open Guide</div>
+    </a>
+    <a class="guide-card gen4" href="Gen 4/index.html">
+      <div class="card-gen-label">GEN 4</div>
+      <div class="card-eguide">eGUIDE</div>
+      <div class="card-title">The complete Gen 4 companion</div>
+      <div class="card-games">
+        <span class="game-tag tag-diamond">Diamond</span>
+        <span class="game-tag tag-pearl">Pearl</span>
+        <span class="game-tag tag-platinum">Platinum</span>
+        <span class="game-tag tag-heartgold">HeartGold</span>
+        <span class="game-tag tag-soulsilver">SoulSilver</span>
+      </div>
+      <div class="card-cta">Open Guide</div>
+    </a>
+  </div>
+</main>
+<footer>Pokémon eGuides</footer>
+</body>
+</html>
