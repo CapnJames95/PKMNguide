@@ -31,7 +31,42 @@
     color: var(--text);
     font-family: 'Nunito', sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
   }
+  #sprite-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(76,175,80,0.08), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(136,204,255,0.08), transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(245,197,24,0.04), transparent 60%);
+  }
+  #sprite-bg img {
+    position: absolute;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    will-change: transform;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+    opacity: 0;
+    animation-name: drift, bob;
+    animation-iteration-count: infinite, infinite;
+    animation-timing-function: linear, ease-in-out;
+    animation-direction: normal, alternate;
+  }
+  @keyframes drift {
+    0%   { transform: translate(-12vw, 0) rotate(0deg); opacity: 0; }
+    8%   { opacity: var(--op, 0.55); }
+    92%  { opacity: var(--op, 0.55); }
+    100% { transform: translate(112vw, 0) rotate(0deg); opacity: 0; }
+  }
+  @keyframes bob {
+    0%   { margin-top: -18px; }
+    100% { margin-top: 18px; }
+  }
+  header, main, footer { position: relative; z-index: 1; }
   header {
     background: var(--panel);
     border-bottom: 2px solid var(--border);
@@ -186,6 +221,7 @@
 </style>
 </head>
 <body>
+<div id="sprite-bg" aria-hidden="true"></div>
 <header>
   <div class="header-logo">PKMN<br><span>eGUIDES</span></div>
   <div class="header-subtitle">Your complete Pokémon companion</div>
@@ -225,5 +261,52 @@
   </div>
 </main>
 <footer>Pokémon eGuides</footer>
+<script>
+(() => {
+  const bg = document.getElementById('sprite-bg');
+  const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+  // Fan-favourite picks across gens 1-4 (493 total available)
+  const POKEMON_IDS = [
+    1,4,7,25,26,39,52,54,58,63,66,74,92,94,104,113,126,131,133,134,135,136,143,
+    147,150,151,152,155,158,172,179,196,197,212,242,243,244,245,249,250,251,
+    252,255,258,302,303,304,310,319,320,330,350,359,380,381,384,385,
+    387,390,393,403,406,427,443,447,448,470,471,475,483,484,487,491,493
+  ];
+  const COUNT = Math.min(70, Math.max(35, Math.floor(window.innerWidth / 28)));
+  const used = new Set();
+  function pick() {
+    let id;
+    do { id = POKEMON_IDS[Math.floor(Math.random() * POKEMON_IDS.length)]; }
+    while (used.has(id) && used.size < POKEMON_IDS.length);
+    used.add(id);
+    return id;
+  }
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+  function spawn(i) {
+    const img = document.createElement('img');
+    const id = pick();
+    img.src = SPRITE_BASE + id + '.png';
+    img.alt = '';
+    img.loading = 'lazy';
+    const size = Math.round(rand(48, 110));
+    const top = rand(2, 92);
+    const driftDur = rand(28, 65);
+    const bobDur = rand(2.4, 5.5);
+    const delay = -rand(0, driftDur);
+    const opacity = rand(0.18, 0.5).toFixed(2);
+    img.style.width = size + 'px';
+    img.style.height = size + 'px';
+    img.style.top = top + 'vh';
+    img.style.left = '0';
+    img.style.setProperty('--op', opacity);
+    img.style.animationDuration = `${driftDur}s, ${bobDur}s`;
+    img.style.animationDelay = `${delay}s, ${-rand(0, bobDur)}s`;
+    if (Math.random() < 0.5) img.style.transform = 'scaleX(-1)';
+    img.onerror = () => img.remove();
+    bg.appendChild(img);
+  }
+  for (let i = 0; i < COUNT; i++) spawn(i);
+})();
+</script>
 </body>
 </html>
