@@ -333,7 +333,9 @@
   function spawn(i) {
     const img = document.createElement('img');
     const id = pick();
-    img.src = SPRITE_BASE + id + '.png';
+    const isShiny = Math.random() < 0.1;
+    img.src = SPRITE_BASE + (isShiny ? 'shiny/' : '') + id + '.png';
+    if (isShiny) img.classList.add('shiny');
     img.alt = '';
     img.loading = 'lazy';
     const size = Math.round(rand(48, 110));
@@ -350,7 +352,6 @@
     img.style.animationDuration = `${driftDur}s, ${bobDur}s`;
     img.style.animationDelay = `${delay}s, ${-rand(0, bobDur)}s`;
     if (Math.random() < 0.5) img.style.transform = 'scaleX(-1)';
-    if (Math.random() < 0.1) img.classList.add('shiny');
     img.onerror = () => img.remove();
     bg.appendChild(img);
   }
