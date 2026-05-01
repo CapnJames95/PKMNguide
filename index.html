@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pokémon eGuides</title>
+<meta name="description" content="Pokémon eGuides — your complete companion for Gen 3 and Gen 4 Pokémon games.">
+<meta name="theme-color" content="#0d0f1e">
+<meta property="og:title" content="Pokémon eGuides">
+<meta property="og:description" content="Your complete companion for Gen 3 and Gen 4 Pokémon games.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pkmnguide.com/">
+<meta property="og:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pokémon eGuides">
+<meta name="twitter:description" content="Your complete companion for Gen 3 and Gen 4 Pokémon games.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23fff' stroke='%23111' stroke-width='4'/%3E%3Cpath d='M2 32a30 30 0 0 1 60 0' fill='%23ee2233' stroke='%23111' stroke-width='4'/%3E%3Crect x='2' y='30' width='60' height='4' fill='%23111'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23fff' stroke='%23111' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='3' fill='%23fff' stroke='%23111' stroke-width='2'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -39,10 +51,14 @@
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     background:
       radial-gradient(circle at 20% 10%, rgba(76,175,80,0.08), transparent 40%),
       radial-gradient(circle at 80% 80%, rgba(136,204,255,0.08), transparent 45%),
       radial-gradient(circle at 50% 50%, rgba(245,197,24,0.04), transparent 60%);
+  }
+  #sprite-bg img.shiny {
+    filter: drop-shadow(0 0 8px rgba(255,215,80,0.85)) drop-shadow(0 4px 6px rgba(0,0,0,0.5)) brightness(1.1);
   }
   #sprite-bg img {
     position: absolute;
@@ -109,6 +125,11 @@
     text-shadow: 3px 3px 0 rgba(0,0,0,.4);
     text-align: center;
     letter-spacing: 1px;
+    animation: heroPulse 4s ease-in-out infinite alternate;
+  }
+  @keyframes heroPulse {
+    from { text-shadow: 3px 3px 0 rgba(0,0,0,.4), 0 0 0 rgba(245,197,24,0); }
+    to   { text-shadow: 3px 3px 0 rgba(0,0,0,.4), 0 0 28px rgba(245,197,24,0.4); }
   }
   .hero-sub {
     font-size: 14px;
@@ -137,13 +158,31 @@
     transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     cursor: pointer;
+    animation: cardIn 0.6s ease-out backwards;
+  }
+  .guide-card:nth-child(2) { animation-delay: 0.12s; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   .guide-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 32px rgba(0,0,0,0.55);
   }
-  .guide-card.gen3:hover { border-color: var(--emerald); }
-  .guide-card.gen4:hover { border-color: var(--diamond); }
+  .guide-card:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 4px;
+  }
+  .guide-card.gen3:hover {
+    border-color: var(--emerald);
+    box-shadow: 0 10px 32px rgba(0,170,68,0.35), 0 0 0 1px rgba(0,170,68,0.2);
+  }
+  .guide-card.gen4:hover {
+    border-color: var(--diamond);
+    box-shadow: 0 10px 32px rgba(136,204,255,0.35), 0 0 0 1px rgba(136,204,255,0.2);
+  }
+  .card-gen-label { transition: transform 0.2s ease; }
+  .guide-card:hover .card-gen-label { transform: scale(1.06); }
   .card-gen-label {
     font-family: 'Bungee', cursive;
     font-size: 2.4rem;
@@ -218,6 +257,14 @@
     .guide-card { width: 100%; max-width: 340px; padding: 28px 24px; }
     main { padding: 32px 16px; }
   }
+  @media (prefers-reduced-motion: reduce) {
+    #sprite-bg { transition: none; }
+    #sprite-bg img { animation: none !important; opacity: 0.3 !important; }
+    .hero-title { animation: none; }
+    .guide-card { animation: none; }
+    .guide-card:hover { transform: none; }
+    .guide-card:hover .card-gen-label { transform: none; }
+  }
 </style>
 </head>
 <body>
@@ -265,6 +312,7 @@
 (() => {
   const bg = document.getElementById('sprite-bg');
   const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Fan-favourite picks across gens 1-4 (493 total available)
   const POKEMON_IDS = [
     1,4,7,25,26,39,52,54,58,63,66,74,92,94,104,113,126,131,133,134,135,136,143,
@@ -272,7 +320,9 @@
     252,255,258,302,303,304,310,319,320,330,350,359,380,381,384,385,
     387,390,393,403,406,427,443,447,448,470,471,475,483,484,487,491,493
   ];
-  const COUNT = Math.min(70, Math.max(35, Math.floor(window.innerWidth / 28)));
+  const COUNT = reduceMotion
+    ? Math.min(20, Math.floor(window.innerWidth / 80))
+    : Math.min(70, Math.max(35, Math.floor(window.innerWidth / 28)));
   const used = new Set();
   function pick() {
     let id;
@@ -302,10 +352,25 @@
     img.style.animationDuration = `${driftDur}s, ${bobDur}s`;
     img.style.animationDelay = `${delay}s, ${-rand(0, bobDur)}s`;
     if (Math.random() < 0.5) img.style.transform = 'scaleX(-1)';
+    if (Math.random() < 0.1) img.classList.add('shiny');
     img.onerror = () => img.remove();
     bg.appendChild(img);
   }
   for (let i = 0; i < COUNT; i++) spawn(i);
+
+  if (!reduceMotion) {
+    let tx = 0, ty = 0, raf = 0;
+    window.addEventListener('mousemove', (e) => {
+      const dx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const dy = (e.clientY / window.innerHeight - 0.5) * 2;
+      tx = dx * -12;
+      ty = dy * -12;
+      if (!raf) raf = requestAnimationFrame(() => {
+        bg.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+        raf = 0;
+      });
+    }, { passive: true });
+  }
 })();
 </script>
 </body>
