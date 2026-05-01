@@ -51,7 +51,6 @@
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     background:
       radial-gradient(circle at 20% 10%, rgba(76,175,80,0.08), transparent 40%),
       radial-gradient(circle at 80% 80%, rgba(136,204,255,0.08), transparent 45%),
@@ -258,7 +257,6 @@
     main { padding: 32px 16px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #sprite-bg { transition: none; }
     #sprite-bg img { animation: none !important; opacity: 0.3 !important; }
     .hero-title { animation: none; }
     .guide-card { animation: none; }
@@ -357,20 +355,6 @@
     bg.appendChild(img);
   }
   for (let i = 0; i < COUNT; i++) spawn(i);
-
-  if (!reduceMotion) {
-    let tx = 0, ty = 0, raf = 0;
-    window.addEventListener('mousemove', (e) => {
-      const dx = (e.clientX / window.innerWidth - 0.5) * 2;
-      const dy = (e.clientY / window.innerHeight - 0.5) * 2;
-      tx = dx * -12;
-      ty = dy * -12;
-      if (!raf) raf = requestAnimationFrame(() => {
-        bg.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
-        raf = 0;
-      });
-    }, { passive: true });
-  }
 })();
 </script>
 </body>
