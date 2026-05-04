@@ -43,6 +43,9 @@
     color: var(--text);
     font-family: 'Nunito', sans-serif;
     min-height: 100vh;
+    min-height: 100dvh;
+    /* Prevent rubber-band overscroll exposing a white gap on mobile Chrome */
+    overscroll-behavior-y: none;
   }
   #sprite-bg {
     position: fixed;
@@ -121,6 +124,7 @@
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 80px);
+    min-height: calc(100dvh - 80px);
     padding: 48px 24px;
     gap: 48px;
   }
