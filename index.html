@@ -148,7 +148,7 @@
     background: var(--card);
     border: 2px solid var(--border);
     border-radius: 14px;
-    padding: 36px 40px;
+    padding: 36px 32px;
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -218,10 +218,11 @@
   .game-tag {
     font-size: 10px;
     font-weight: 800;
-    padding: 3px 10px;
+    padding: 3px 8px;
     border-radius: 20px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     text-transform: uppercase;
+    white-space: nowrap;
   }
   .tag-fire    { background: rgba(255,107,53,0.18); color: var(--fire); border: 1px solid rgba(255,107,53,0.3); }
   .tag-leaf    { background: rgba(76,175,80,0.18);  color: var(--leaf); border: 1px solid rgba(76,175,80,0.3); }
@@ -288,6 +289,7 @@
       <div class="card-games">
         <span class="game-tag tag-fire">FireRed</span>
         <span class="game-tag tag-leaf">LeafGreen</span>
+        <span class="row-break" aria-hidden="true"></span>
         <span class="game-tag tag-ruby">Ruby</span>
         <span class="game-tag tag-sapphire">Sapphire</span>
         <span class="game-tag tag-emerald">Emerald</span>
