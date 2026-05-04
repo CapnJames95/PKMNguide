@@ -43,7 +43,6 @@
     color: var(--text);
     font-family: 'Nunito', sans-serif;
     min-height: 100vh;
-    overflow-x: hidden;
   }
   #sprite-bg {
     position: fixed;
@@ -83,14 +82,20 @@
     0%   { transform: translate3d(0, -18px, 0) scaleX(var(--flip, 1)); }
     100% { transform: translate3d(0, 18px, 0) scaleX(var(--flip, 1)); }
   }
-  header, main, footer { position: relative; z-index: 1; }
+  main, footer { position: relative; z-index: 1; }
   header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     background: var(--panel);
     border-bottom: 2px solid var(--border);
     padding: 18px 32px;
     display: flex;
     align-items: center;
     gap: 16px;
+    /* Force own compositor layer so iOS Safari doesn't drop it during URL-bar transitions */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   .header-logo {
     font-family: 'Bungee', cursive;
