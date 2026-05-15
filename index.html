@@ -287,6 +287,7 @@
 <header>
   <div class="header-logo">PKMN<br><span>eGUIDES</span></div>
   <div class="header-subtitle">Your complete Pokémon companion</div>
+  <div id="authSlot" style="margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)"></div>
 </header>
 <main>
   <div>
@@ -380,6 +381,56 @@
     bg.appendChild(wrap);
   }
   for (let i = 0; i < COUNT; i++) spawn(i);
+})();
+</script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  function renderAuthSlot() {
+    var slot = document.getElementById('authSlot');
+    if (!slot) return;
+    var user = window.pgAuth && window.pgAuth.getUser ? window.pgAuth.getUser() : null;
+    if (user && user.email) {
+      slot.innerHTML = '';
+      if (user.picture) {
+        var img = document.createElement('img');
+        img.src = user.picture;
+        img.style.cssText = 'width:24px;height:24px;border-radius:50%;border:1px solid var(--border)';
+        img.alt = '';
+        slot.appendChild(img);
+      }
+      var label = document.createElement('span');
+      label.textContent = user.email;
+      label.style.cssText = 'font-weight:600;color:var(--text);';
+      slot.appendChild(label);
+      var btn = document.createElement('button');
+      btn.textContent = 'Sign out';
+      btn.style.cssText = 'background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;';
+      btn.onclick = function () { window.pgAuth.signOut(); };
+      slot.appendChild(btn);
+    } else {
+      slot.innerHTML = '';
+      var btn = document.createElement('button');
+      btn.textContent = 'Sign in with Google';
+      btn.style.cssText = 'background:var(--gold);color:#000;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:0.4px;cursor:pointer;font-family:inherit;';
+      btn.onclick = function () {
+        btn.disabled = true;
+        btn.textContent = 'Connecting…';
+        window.pgAuth.signIn().catch(function (err) {
+          btn.disabled = false;
+          btn.textContent = 'Sign in with Google';
+          alert('Sign-in failed: ' + (err && err.message ? err.message : 'unknown error'));
+        });
+      };
+      slot.appendChild(btn);
+    }
+  }
+  function whenReady() {
+    if (!window.pgAuth) { setTimeout(whenReady, 100); return; }
+    renderAuthSlot();
+    window.pgAuth.onChange(renderAuthSlot);
+  }
+  whenReady();
 })();
 </script>
 </body>
