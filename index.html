@@ -36,6 +36,9 @@
     --platinum: #c0c0c0;
     --heartgold: #ffcc44;
     --soulsilver: #aaddee;
+    --gold-game: #E5B928;
+    --silver-game: #B0BEC5;
+    --crystal-game: #7FB8E0;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -171,6 +174,7 @@
     animation: cardIn 0.6s ease-out backwards;
   }
   .guide-card:nth-child(2) { animation-delay: 0.12s; }
+  .guide-card:nth-child(3) { animation-delay: 0.24s; }
   @keyframes cardIn {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -182,6 +186,10 @@
   .guide-card:focus-visible {
     outline: 3px solid var(--gold);
     outline-offset: 4px;
+  }
+  .guide-card.gen2:hover {
+    border-color: var(--gold-game);
+    box-shadow: 0 10px 32px rgba(229,185,40,0.35), 0 0 0 1px rgba(229,185,40,0.2);
   }
   .guide-card.gen3:hover {
     border-color: var(--emerald);
@@ -200,6 +208,7 @@
     line-height: 1;
     text-shadow: 3px 3px 0 rgba(0,0,0,.35);
   }
+  .gen2 .card-gen-label { color: var(--gold-game); }
   .gen3 .card-gen-label { color: var(--emerald); }
   .gen4 .card-gen-label { color: var(--diamond); }
   .card-eguide {
@@ -240,6 +249,9 @@
   .tag-ruby    { background: rgba(204,34,0,0.18);   color: #ff6655;     border: 1px solid rgba(204,34,0,0.3); }
   .tag-sapphire{ background: rgba(0,85,204,0.18);   color: #5599ff;     border: 1px solid rgba(0,85,204,0.3); }
   .tag-emerald { background: rgba(0,170,68,0.18);   color: var(--emerald); border: 1px solid rgba(0,170,68,0.3); }
+  .tag-gold-game    { background: rgba(229,185,40,0.18);  color: var(--gold-game);    border: 1px solid rgba(229,185,40,0.3); }
+  .tag-silver-game  { background: rgba(176,190,197,0.18); color: var(--silver-game);  border: 1px solid rgba(176,190,197,0.3); }
+  .tag-crystal-game { background: rgba(127,184,224,0.18); color: var(--crystal-game); border: 1px solid rgba(127,184,224,0.3); }
   .tag-diamond { background: rgba(136,204,255,0.18);color: var(--diamond); border: 1px solid rgba(136,204,255,0.3); }
   .tag-pearl   { background: rgba(255,170,204,0.18);color: var(--pearl); border: 1px solid rgba(255,170,204,0.3); }
   .tag-platinum{ background: rgba(192,192,192,0.18);color: var(--platinum); border: 1px solid rgba(192,192,192,0.3); }
@@ -257,6 +269,7 @@
     cursor: pointer;
     transition: opacity 0.15s;
   }
+  .gen2 .card-cta { background: var(--gold-game); color: #000; }
   .gen3 .card-cta { background: var(--emerald); color: #000; }
   .gen4 .card-cta { background: var(--diamond); color: #000; }
   .guide-card:hover .card-cta { opacity: 0.85; }
@@ -297,6 +310,17 @@
     <div class="hero-sub">Select a guide to get started</div>
   </div>
   <div class="cards">
+    <a class="guide-card gen2" href="https://gen2.pkmnguide.com/">
+      <div class="card-gen-label">GEN 2</div>
+      <div class="card-eguide">eGUIDE</div>
+      <div class="card-title">The complete Gen 2 companion</div>
+      <div class="card-games">
+        <span class="game-tag tag-gold-game">Gold</span>
+        <span class="game-tag tag-silver-game">Silver</span>
+        <span class="game-tag tag-crystal-game">Crystal</span>
+      </div>
+      <div class="card-cta">Open Guide</div>
+    </a>
     <a class="guide-card gen3" href="https://gen3.pkmnguide.com/">
       <div class="card-gen-label">GEN 3</div>
       <div class="card-eguide">eGUIDE</div>
